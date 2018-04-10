@@ -6,7 +6,7 @@ export default (sequelize, Datatypes) => {
 	User.associate = (models) => {
 		// one to many with board
 		User.hasMany(models.Board, {
-			foreignKey: 'owner',
+			foreignKey: 'userId',
 
 		});
 
