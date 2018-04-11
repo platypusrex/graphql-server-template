@@ -1,20 +1,20 @@
 export default {
 	User: {
-		boards: (parent, args, {Board}) => Board.findAll({
+		boards: (parent, args, {models}) => models.Board.findAll({
 			where: {userId: parent.id}
 		}),
-		suggestions: (parent, args, {Suggestion}) => Suggestion.findAll({
+		suggestions: (parent, args, {models}) => models.Suggestion.findAll({
 			where: {userId: parent.id}
 		}),
 	},
 	Board: {
-		suggestions: (parent, args, {Suggestion}) => Suggestion.findAll({
+		suggestions: (parent, args, {models}) => modelsSuggestion.findAll({
 			where: {boardId: parent.id}
 		}),
 	},
 	Suggestion: {
-		username: async (parent, args, {User}) => {
-			const user = await User.findOne({
+		username: async (parent, args, {models}) => {
+			const user = await models.User.findOne({
 				where: {id: parent.userId}
 			});
 
@@ -22,23 +22,28 @@ export default {
 		}
 	},
 	Query: {
-		allUsers: (parent, args, {User}) => User.findAll(),
-		allBoards: (parent, args, {Board}) => Board.findAll(),
-		allSuggestions: (parent, args, {Suggestion}) => Suggestion.findAll(),
-		getUser: (parent, {username}, {User}) =>
-			User.findOne({
-				where: {
-					username
-				}
-			}),
-		userBoards: (parent, {userId}, {Board}) =>
-			Board.findAll({
+		allUsers: (parent, args, {models}) => models.User.findAll(),
+		allBoards: (parent, args, {models}) => models.Board.findAll(),
+		allSuggestions: (parent, args, {models}) => models.Suggestion.findAll(),
+		getUser: (parent, args, {models, user}) => {
+			if (user) {
+				return models.User.findOne({
+					where: {
+						id: user.id
+					}
+				})
+			}
+
+			return null;
+		},
+		userBoards: (parent, {userId}, {models}) =>
+			models.Board.findAll({
 				where: {
 					userId
 				},
 			}),
-		userSuggestions: (parent, {userId}, {Suggestion}) =>
-			Suggestion.findAll({
+		userSuggestions: (parent, {userId}, {models}) =>
+			models.Suggestion.findAll({
 				where: {
 					userId
 				}
