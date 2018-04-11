@@ -20,6 +20,7 @@ export const typeDefs = `
 
 	type User {
 		id: Int!
+		email: String!
 		username: String!
 		createdAt: String!
 		updatedAt: String!
@@ -31,12 +32,14 @@ export const typeDefs = `
 		allUsers: [User!]!
 		allBoards: [Board!]!
 		allSuggestions: [Suggestion!]!
-		getUser(username: String!): User
+		getUser: User
 		userBoards(userId: Int!): [Board!]!
 		userSuggestions(userId: Int!): [Suggestion!]!
 	}
 	
 	type Mutation {
+		register(email: String, password: String!, username: String!): User!
+		login(email: String!, password: String!): String!
 		createUser(username: String!): User
 		updateUser(username: String!, newUsername: String!): [Int!]!
 		deleteUser(username: String!): Int!
